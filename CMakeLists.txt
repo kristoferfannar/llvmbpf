@@ -39,6 +39,9 @@ set_target_properties(llvmbpf_vm PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CU
 
 find_package(LLVM REQUIRED CONFIG)
 
+message(STATUS "Checking LLVM_VERSION_MAJOR macro value...")
+message(STATUS "LLVM_VERSION_MAJOR is: ${LLVM_VERSION_MAJOR}")
+
 if(${LLVM_PACKAGE_VERSION} VERSION_LESS 15)
     message(FATAL_ERROR "LLVM version must be >=15")
 endif()
@@ -78,12 +81,12 @@ endif()
 # if BPFTIME_LLVM_JIT is set, then it's built in the bpftime project.
 # If not, it's built as a standalone library.
 if(${BPFTIME_LLVM_JIT})
-    # build cli in the main project because it relies on libbpf
     add_subdirectory(cli)
 else()
     if(${BUILD_LLVM_AOT_CLI})
         add_subdirectory(cli)
     endif()
+
 
     if(${BPFTIME_ENABLE_UNIT_TESTING})
         if (NOT TARGET Catch2)
